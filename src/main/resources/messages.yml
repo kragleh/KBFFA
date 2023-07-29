@@ -1,0 +1,18 @@
+no-perm: "&cYou don't have the permission for this!"
+usage: "&eUsage:"
+arg-err: "&cToo many or not enough arguments!"
+
+world:
+  no: "&cThis world doesn't exist!"
+  fail: "&cFailed to load the world!"
+  exists: "&aThis world already exists!"
+  types: "&fWorld types: &aNORMAL&8, &cNETHER&8, &7THE_END"
+  has: "&cThis world is already in the list!"
+  dhave: "&cThis world is not in the list!"
+  added: "&aWorld added to the list!"
+  not-added: "&cWorld failed to be included into the list!"
+  cmd:
+    - "&6/world create <name> [type] &8- &7Creates a void world with the name and type"
+    - "&6/world tp <name> &8- &7Teleports you to the world"
+    - "&6/world add <name> &8- &7Adds the world into the world list"
+    - "&6/world remove <name> &8- &7Removes the world from the world list"

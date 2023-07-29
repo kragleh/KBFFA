@@ -1,0 +1,10 @@
+arena:
+  # Arena switch timer in seconds
+  switcher: 300
+
+mysql:
+  host: localhost
+  port: 3306
+  name: kbffa
+  user: root
+  pass: ''

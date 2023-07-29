@@ -1,0 +1,5 @@
+name: KBFFA
+version: '${project.version}'
+main: com.kragleh.kbffa.KBFFA
+api-version: '1.16'
+authors: [kragleh]

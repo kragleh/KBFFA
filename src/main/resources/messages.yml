@@ -18,6 +18,8 @@ world:
     - "&6/world remove <name> &8- &7Removes the world from the world list"
 
 arena:
+  created: "&aArena created!"
+  failed: "&cArena failed to create!"
   exists: "&cArena already exists!"
   maxy-err: "&cMaxY is an integer!"
   cmd:

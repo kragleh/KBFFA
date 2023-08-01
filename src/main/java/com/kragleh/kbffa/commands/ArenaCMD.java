@@ -23,7 +23,7 @@ public class ArenaCMD extends BaseCommand {
     @CommandCompletion("<name> <maxY>")
     @CommandPermission("kbffa.arena.create")
     public void onCreate(Player player, String[] args) {
-        if (args.length > 3 || args.length <= 2) {
+        if (args.length != 2) {
             player.sendMessage(MessageUtil.format(KBFFA.getMessages().getString("arg-err")));
             return;
         }
@@ -48,6 +48,12 @@ public class ArenaCMD extends BaseCommand {
         arenas.set("arenas." + name + ".spawn", player.getLocation());
         arenas.set("arenas." + name + ".y.max", maxY);
         arenas.set("arenas." + name + ".world", name);
+
+        if (KBFFA.saveArenas()) {
+            player.sendMessage(MessageUtil.format(KBFFA.getMessages().getString("arena.exists")));
+        } else {
+            player.sendMessage(MessageUtil.format(KBFFA.getMessages().getString("arena.exists")));
+        }
     }
 
 }

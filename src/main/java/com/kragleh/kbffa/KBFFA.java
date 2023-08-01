@@ -5,18 +5,25 @@ import com.kragleh.kbffa.arena.ArenaManager;
 import com.kragleh.kbffa.commands.ArenaCMD;
 import com.kragleh.kbffa.commands.WorldCMD;
 import com.kragleh.kbffa.db.DataSource;
+import com.kragleh.kbffa.events.OnDamage;
+import com.kragleh.kbffa.events.OnDeath;
+import com.kragleh.kbffa.events.OnDrop;
+import com.kragleh.kbffa.events.OnJoin;
 import com.kragleh.kbffa.util.VoidChunkGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
 
 public final class KBFFA extends JavaPlugin {
@@ -86,6 +93,25 @@ public final class KBFFA extends JavaPlugin {
         // Load Managers
         ArenaManager.init(arenas);
 
+
+        BukkitScheduler scheduler = getServer().getScheduler();
+
+        scheduler.scheduleSyncRepeatingTask(this, () -> {
+            Random r = new Random();
+            int next = r.nextInt(ArenaManager.arenas.size());
+            ArenaManager.setCurrent(ArenaManager.arenas.get(next));
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                player.teleport(ArenaManager.getCurrent().getSpawn());
+            });
+        }, 0, getConfig().getInt("arena.switcher") * 1000L);
+
+
+        // Register Events
+        getServer().getPluginManager().registerEvents(new OnDamage(), this);
+        getServer().getPluginManager().registerEvents(new OnDrop(), this);
+        getServer().getPluginManager().registerEvents(new OnDeath(), this);
+        getServer().getPluginManager().registerEvents(new OnJoin(), this);
+
         log.info("Plugin loaded in " + (System.currentTimeMillis() - now) + "ms");
     }
 
@@ -93,9 +119,11 @@ public final class KBFFA extends JavaPlugin {
     public void onDisable() {
         log.info("Saving configuration files!");
         try {
-            messages.save(messagesFile);
             worlds.save(worldsFile);
-            log.info("Configuration files saved!");
+            log.info("Worlds.yml saved!");
+            arenas.save(arenasFile);
+            log.info("Arenas.yml saved!");
+            log.info("Files successfully saved!");
         } catch (IOException e) {
             log.severe("Unable to save a configuration file!");
         }

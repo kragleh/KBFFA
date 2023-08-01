@@ -1,3 +1,5 @@
+setup: true
+
 arena:
   # Arena switch timer in seconds
   switcher: 300

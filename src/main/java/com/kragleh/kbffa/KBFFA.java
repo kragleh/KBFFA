@@ -2,6 +2,7 @@ package com.kragleh.kbffa;
 
 import co.aikar.commands.PaperCommandManager;
 import com.kragleh.kbffa.arena.ArenaManager;
+import com.kragleh.kbffa.commands.ArenaCMD;
 import com.kragleh.kbffa.commands.WorldCMD;
 import com.kragleh.kbffa.db.DataSource;
 import com.kragleh.kbffa.util.VoidChunkGenerator;
@@ -22,11 +23,12 @@ public final class KBFFA extends JavaPlugin {
 
     private static KBFFA plugin;
     private Logger log;
-    public YamlConfiguration arenas;
-    public static YamlConfiguration messages;
-    public static File messagesFile;
-    public static YamlConfiguration worlds;
-    public static File worldsFile;
+    private static YamlConfiguration arenas;
+    private static File arenasFile;
+    private static YamlConfiguration messages;
+    private static File messagesFile;
+    private static YamlConfiguration worlds;
+    private static File worldsFile;
 
     @Override
     public void onEnable() {
@@ -71,12 +73,18 @@ public final class KBFFA extends JavaPlugin {
             }
         }
 
-        // Load Managers
-        ArenaManager.load(arenas);
-
         // Load Commands
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.registerCommand(new WorldCMD());
+        manager.registerCommand(new ArenaCMD());
+
+        if (getConfig().getBoolean("setup")) {
+            log.warning("Currently in setup mode! Change the setup value in config.yml to enter game mode!");
+            return;
+        }
+
+        // Load Managers
+        ArenaManager.init(arenas);
 
         log.info("Plugin loaded in " + (System.currentTimeMillis() - now) + "ms");
     }
@@ -91,22 +99,6 @@ public final class KBFFA extends JavaPlugin {
         } catch (IOException e) {
             log.severe("Unable to save a configuration file!");
         }
-    }
-
-    public void loadArenas() {
-        File file = new File(getDataFolder(), "arenas.yml");
-
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-                saveResource("arenas.yml", true);
-            }
-        } catch (IOException e) {
-            log.severe("Unable to create arenas.yml file!");
-            getPluginLoader().disablePlugin(this);
-        }
-
-        arenas = YamlConfiguration.loadConfiguration(file);
     }
 
     public void loadMessages() {
@@ -126,6 +118,19 @@ public final class KBFFA extends JavaPlugin {
         messages = YamlConfiguration.loadConfiguration(file);
     }
 
+    public static YamlConfiguration getMessages() {
+        return messages;
+    }
+
+    public static boolean saveMessages() {
+        try {
+            messages.save(messagesFile);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     public void loadWorlds() {
         File file = new File(getDataFolder(), "worlds.yml");
         worldsFile = file;
@@ -143,20 +148,46 @@ public final class KBFFA extends JavaPlugin {
         worlds = YamlConfiguration.loadConfiguration(file);
     }
 
-    public static YamlConfiguration getMessages() {
-        return messages;
-    }
-
-    public static File getMessagesFile() {
-        return messagesFile;
-    }
-
     public static YamlConfiguration getWorlds() {
         return worlds;
     }
 
-    public static File getWorldsFile() {
-        return worldsFile;
+    public static boolean saveWorlds() {
+        try {
+            worlds.save(worldsFile);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    public void loadArenas() {
+        File file = new File(getDataFolder(), "arenas.yml");
+        arenasFile = file;
+
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+                saveResource("arenas.yml", true);
+            }
+        } catch (IOException e) {
+            log.severe("Unable to create arenas.yml file!");
+            getPluginLoader().disablePlugin(this);
+        }
+
+        arenas = YamlConfiguration.loadConfiguration(file);
+    }
+    public static YamlConfiguration getArenas() {
+        return arenas;
+    }
+
+    public static boolean saveArenas() {
+        try {
+            arenas.save(arenasFile);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     public static KBFFA getPlugin() {

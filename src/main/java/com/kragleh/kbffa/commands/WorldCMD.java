@@ -9,11 +9,9 @@ import com.kragleh.kbffa.KBFFA;
 import com.kragleh.kbffa.util.MessageUtil;
 import com.kragleh.kbffa.util.VoidChunkGenerator;
 import org.bukkit.*;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 @CommandAlias("world|w")
@@ -118,23 +116,9 @@ public class WorldCMD extends BaseCommand {
             return;
         }
 
-        World world = Bukkit.getWorld(args[0]);
-
-        if (world == null) {
-            WorldCreator worldCreator = new WorldCreator(args[0]);
-            worldCreator.generator(new VoidChunkGenerator());
-            worldCreator.generateStructures(false);
-
-            world = worldCreator.createWorld();
-
-            if (world == null) {
-                player.sendMessage(MessageUtil.format(KBFFA.getMessages().getString("world.fail")));
-                return;
-            }
-        }
-
         list.add(args[0]);
         KBFFA.getWorlds().set("worlds", list);
+        KBFFA.saveWorlds();
     }
 
     @Subcommand("remove")
@@ -176,12 +160,7 @@ public class WorldCMD extends BaseCommand {
 
         worlds.add(args[0]);
         KBFFA.getWorlds().set("worlds", worlds);
-        try {
-            KBFFA.getWorlds().save(KBFFA.getWorldsFile());
-            player.sendMessage(MessageUtil.format(KBFFA.getMessages().getString("world.added")));
-        } catch (IOException e) {
-            player.sendMessage(MessageUtil.format(KBFFA.getMessages().getString("world.not-added")));
-        }
+        KBFFA.saveWorlds();
     }
 
 }

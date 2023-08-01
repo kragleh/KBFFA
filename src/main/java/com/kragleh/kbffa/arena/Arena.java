@@ -1,30 +1,26 @@
 package com.kragleh.kbffa.arena;
 
-import com.kragleh.kbffa.util.VoidChunkGenerator;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.configuration.file.YamlConfiguration;
-
-import java.util.Objects;
 
 public class Arena {
 
     private String name;
     private Location spawn;
     private int maxY;
-    private int minY;
     private World world;
 
     public Arena(String name, YamlConfiguration arenas) {
         this.name = name;
-        this.spawn = arenas.getLocation(name + ".spawn");
-        this.maxY = arenas.getInt(name + ".y.max");
-        this.minY = arenas.getInt(name + ".y.min");
-        WorldCreator worldCreator = new WorldCreator(Objects.requireNonNull(arenas.getString(name + ".world")));
-        worldCreator.generator(new VoidChunkGenerator());
-        worldCreator.generateStructures(false);
-        world = worldCreator.createWorld();
+        this.spawn = arenas.getLocation("arenas." + name + ".spawn");
+        this.maxY = arenas.getInt("arenas." + name + ".y.max");
+        this.world = Bukkit.getWorld(arenas.getString("arenas." + name + ".world"));
+    }
+
+    public Location getSpawn() {
+        return spawn;
     }
 
     public String getName() {
@@ -35,7 +31,8 @@ public class Arena {
         return maxY;
     }
 
-    public int getMinY() {
-        return minY;
+    public World getWorld() {
+        return world;
     }
+
 }

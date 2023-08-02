@@ -5,10 +5,7 @@ import com.kragleh.kbffa.arena.ArenaManager;
 import com.kragleh.kbffa.commands.ArenaCMD;
 import com.kragleh.kbffa.commands.WorldCMD;
 import com.kragleh.kbffa.db.DataSource;
-import com.kragleh.kbffa.events.OnDamage;
-import com.kragleh.kbffa.events.OnDeath;
-import com.kragleh.kbffa.events.OnDrop;
-import com.kragleh.kbffa.events.OnJoin;
+import com.kragleh.kbffa.events.*;
 import com.kragleh.kbffa.util.VoidChunkGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -95,11 +92,10 @@ public final class KBFFA extends JavaPlugin {
 
 
         BukkitScheduler scheduler = getServer().getScheduler();
-
         scheduler.scheduleSyncRepeatingTask(this, () -> {
             Random r = new Random();
-            int next = r.nextInt(ArenaManager.arenas.size());
-            ArenaManager.setCurrent(ArenaManager.arenas.get(next));
+            int nextArena = r.nextInt(ArenaManager.arenas.size());
+            ArenaManager.setCurrent(ArenaManager.arenas.get(nextArena));
             Bukkit.getOnlinePlayers().forEach(player -> {
                 player.teleport(ArenaManager.getCurrent().getSpawn());
             });
@@ -111,6 +107,7 @@ public final class KBFFA extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnDrop(), this);
         getServer().getPluginManager().registerEvents(new OnDeath(), this);
         getServer().getPluginManager().registerEvents(new OnJoin(), this);
+        getServer().getPluginManager().registerEvents(new OnHandSwitch(), this);
 
         log.info("Plugin loaded in " + (System.currentTimeMillis() - now) + "ms");
     }

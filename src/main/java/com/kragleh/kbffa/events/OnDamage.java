@@ -14,7 +14,10 @@ public class OnDamage implements Listener {
         if (!(event.getEntity() instanceof Player)) return;
 
         if (ArenaManager.getCurrent().getMaxY() < event.getEntity().getLocation().getY()) {
+            event.setDamage(0);
             event.setCancelled(true);
+        } else if (0 > event.getEntity().getLocation().getY()) {
+            ((Player) event.getEntity()).setHealth(0);
         } else {
             event.setDamage(0);
         }

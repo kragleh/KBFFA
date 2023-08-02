@@ -1,5 +1,6 @@
 package com.kragleh.kbffa.arena;
 
+import com.kragleh.kbffa.KBFFA;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -12,11 +13,15 @@ public class Arena {
     private int maxY;
     private World world;
 
-    public Arena(String name, YamlConfiguration arenas) {
+    public Arena(String name) {
+        YamlConfiguration arenas = KBFFA.getArenas();
         this.name = name;
-        this.spawn = arenas.getLocation("arenas." + name + ".spawn");
+        double x = arenas.getDouble("arenas." + name + ".spawn.x");
+        double y = arenas.getDouble("arenas." + name + ".spawn.y");
+        double z = arenas.getDouble("arenas." + name + ".spawn.z");
         this.maxY = arenas.getInt("arenas." + name + ".y.max");
         this.world = Bukkit.getWorld(arenas.getString("arenas." + name + ".world"));
+        this.spawn = new Location(world, x, y, z, 0, 0);
     }
 
     public Location getSpawn() {

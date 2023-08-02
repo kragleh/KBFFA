@@ -45,12 +45,15 @@ public class ArenaCMD extends BaseCommand {
             return;
         }
 
-        arenas.set("arenas." + name + ".spawn", player.getLocation());
         arenas.set("arenas." + name + ".y.max", maxY);
         arenas.set("arenas." + name + ".world", name);
 
+        arenas.set("arenas." + name + ".spawn.x", player.getLocation().getX());
+        arenas.set("arenas." + name + ".spawn.y", player.getLocation().getY());
+        arenas.set("arenas." + name + ".spawn.z", player.getLocation().getZ());
+
         if (KBFFA.saveArenas()) {
-            player.sendMessage(MessageUtil.format(KBFFA.getMessages().getString("arena.exists")));
+            player.sendMessage(MessageUtil.format(KBFFA.getMessages().getString("arena.created")));
         } else {
             player.sendMessage(MessageUtil.format(KBFFA.getMessages().getString("arena.exists")));
         }

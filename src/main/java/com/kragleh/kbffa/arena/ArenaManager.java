@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ArenaManager {
 
@@ -17,8 +18,12 @@ public class ArenaManager {
         ConfigurationSection arenasSection = arenasConfig.getConfigurationSection("arenas");
 
         for (String arenaName : arenasSection.getKeys(false)) {
-            arenas.add(new Arena(arenaName, arenasConfig));
+            arenas.add(new Arena(arenaName));
         }
+
+        Random r = new Random();
+        int startArena = r.nextInt(arenas.size());
+        current = arenas.get(startArena);
     }
 
     public static void setCurrent(Arena arena) {

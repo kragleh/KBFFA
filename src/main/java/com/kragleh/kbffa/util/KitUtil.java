@@ -5,6 +5,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class KitUtil {
 
@@ -12,7 +13,9 @@ public class KitUtil {
         PlayerInventory inv = player.getInventory();
         inv.clear();
         ItemStack stick = new ItemStack(Material.STICK);
-        stick.addEnchantment(Enchantment.KNOCKBACK, 3);
+        ItemMeta stickMeta = stick.getItemMeta();
+        stickMeta.addEnchant(Enchantment.KNOCKBACK, 2, true);
+        stick.setItemMeta(stickMeta);
         ItemStack blocks = new ItemStack(Material.CLAY);
         blocks.setAmount(24);
         ItemStack pearl = new ItemStack(Material.ENDER_PEARL);

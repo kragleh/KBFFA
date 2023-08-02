@@ -108,6 +108,8 @@ public final class KBFFA extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnDeath(), this);
         getServer().getPluginManager().registerEvents(new OnJoin(), this);
         getServer().getPluginManager().registerEvents(new OnHandSwitch(), this);
+        getServer().getPluginManager().registerEvents(new OnBlockPlace(), this);
+        getServer().getPluginManager().registerEvents(new OnBlockBreak(), this);
 
         log.info("Plugin loaded in " + (System.currentTimeMillis() - now) + "ms");
     }

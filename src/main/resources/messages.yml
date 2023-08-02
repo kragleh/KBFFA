@@ -2,6 +2,16 @@ no-perm: "&cYou don't have the permission for this!"
 usage: "&fCommand Usage:"
 arg-err: "&cToo many or not enough arguments!"
 
+game:
+  killed:
+    - "&e%killer% has knocked off %player%"
+    - "&e%player% has slipped on %killer%'s mopped floor!"
+    - "&e%killer% launched %player% into the void!"\
+    - "&e%player% skillfully slipped off the edge with %killer%'s help!"
+    - "&e%killer% perfectly timed a hit, ending %player%'s journey!"
+    - "&e%killer% pushed %player% with tremendous force!"
+    - "&e%killer% showed no mercy, knocking %player% into the void!"
+
 world:
   no: "&cThis world doesn't exist!"
   fail: "&cFailed to load the world!"

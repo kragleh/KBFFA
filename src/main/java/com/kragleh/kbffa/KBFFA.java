@@ -5,14 +5,13 @@ import com.kragleh.kbffa.arena.ArenaManager;
 import com.kragleh.kbffa.commands.ArenaCMD;
 import com.kragleh.kbffa.commands.WorldCMD;
 import com.kragleh.kbffa.db.DataSource;
-import com.kragleh.kbffa.events.*;
+import com.kragleh.kbffa.listeners.*;
 import com.kragleh.kbffa.util.VoidChunkGenerator;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
@@ -30,7 +29,6 @@ public final class KBFFA extends JavaPlugin {
     private static YamlConfiguration arenas;
     private static File arenasFile;
     private static YamlConfiguration messages;
-    private static File messagesFile;
     private static YamlConfiguration worlds;
     private static File worldsFile;
 
@@ -48,6 +46,7 @@ public final class KBFFA extends JavaPlugin {
 
         log.info("Testing mysql connection!");
         try (Connection con = DataSource.getConnection()) {
+            con.close();
             log.info("Mysql connection success!");
         } catch (SQLException e) {
             log.severe("Unable to connect to mysql!");
@@ -96,20 +95,20 @@ public final class KBFFA extends JavaPlugin {
             Random r = new Random();
             int nextArena = r.nextInt(ArenaManager.arenas.size());
             ArenaManager.setCurrent(ArenaManager.arenas.get(nextArena));
-            Bukkit.getOnlinePlayers().forEach(player -> {
-                player.teleport(ArenaManager.getCurrent().getSpawn());
-            });
+            Bukkit.getOnlinePlayers().forEach(player -> player.teleport(ArenaManager.getCurrent().getSpawn()));
         }, 0, getConfig().getInt("arena.switcher") * 1000L);
 
 
-        // Register Events
-        getServer().getPluginManager().registerEvents(new OnDamage(), this);
-        getServer().getPluginManager().registerEvents(new OnDrop(), this);
-        getServer().getPluginManager().registerEvents(new OnDeath(), this);
-        getServer().getPluginManager().registerEvents(new OnJoin(), this);
-        getServer().getPluginManager().registerEvents(new OnHandSwitch(), this);
-        getServer().getPluginManager().registerEvents(new OnBlockPlace(), this);
-        getServer().getPluginManager().registerEvents(new OnBlockBreak(), this);
+        // Register Listeners
+        getServer().getPluginManager().registerEvents(new DamageListener(), this);
+        getServer().getPluginManager().registerEvents(new ItemDropListener(), this);
+        getServer().getPluginManager().registerEvents(new DeathListener(), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        getServer().getPluginManager().registerEvents(new HandSwitchListener(), this);
+        getServer().getPluginManager().registerEvents(new BlockListener(), this);
+        getServer().getPluginManager().registerEvents(new HungerListener(), this);
+        getServer().getPluginManager().registerEvents(new MoveListener(), this);
+        getServer().getPluginManager().registerEvents(new HungerListener(), this);
 
         log.info("Plugin loaded in " + (System.currentTimeMillis() - now) + "ms");
     }
@@ -130,16 +129,9 @@ public final class KBFFA extends JavaPlugin {
 
     public void loadMessages() {
         File file = new File(getDataFolder(), "messages.yml");
-        messagesFile = file;
 
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-                saveResource("messages.yml", true);
-            }
-        } catch (IOException e) {
-            log.severe("Unable to create messages.yml file!");
-            getPluginLoader().disablePlugin(this);
+        if (!file.exists()) {
+            saveResource("messages.yml", true);
         }
 
         messages = YamlConfiguration.loadConfiguration(file);
@@ -149,27 +141,12 @@ public final class KBFFA extends JavaPlugin {
         return messages;
     }
 
-    public static boolean saveMessages() {
-        try {
-            messages.save(messagesFile);
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
-    }
-
     public void loadWorlds() {
         File file = new File(getDataFolder(), "worlds.yml");
         worldsFile = file;
 
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-                saveResource("worlds.yml", true);
-            }
-        } catch (IOException e) {
-            log.severe("Unable to create worlds.yml file!");
-            getPluginLoader().disablePlugin(this);
+        if (!file.exists()) {
+            saveResource("worlds.yml", true);
         }
 
         worlds = YamlConfiguration.loadConfiguration(file);
@@ -192,14 +169,8 @@ public final class KBFFA extends JavaPlugin {
         File file = new File(getDataFolder(), "arenas.yml");
         arenasFile = file;
 
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-                saveResource("arenas.yml", true);
-            }
-        } catch (IOException e) {
-            log.severe("Unable to create arenas.yml file!");
-            getPluginLoader().disablePlugin(this);
+        if (!file.exists()) {
+            saveResource("arenas.yml", true);
         }
 
         arenas = YamlConfiguration.loadConfiguration(file);

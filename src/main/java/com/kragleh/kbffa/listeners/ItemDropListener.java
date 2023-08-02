@@ -1,14 +1,14 @@
-package com.kragleh.kbffa.events;
+package com.kragleh.kbffa.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 
-public class OnHandSwitch implements Listener {
+public class ItemDropListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onSwitch(PlayerSwapHandItemsEvent event) {
+    public void onItemDrop(PlayerDropItemEvent event) {
         event.setCancelled(true);
     }
 

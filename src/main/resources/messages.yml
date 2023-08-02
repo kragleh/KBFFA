@@ -6,11 +6,20 @@ game:
   killed:
     - "&e%killer% has knocked off %player%"
     - "&e%player% has slipped on %killer%'s mopped floor!"
-    - "&e%killer% launched %player% into the void!"\
+    - "&e%killer% launched %player% into the void!"
     - "&e%player% skillfully slipped off the edge with %killer%'s help!"
     - "&e%killer% perfectly timed a hit, ending %player%'s journey!"
     - "&e%killer% pushed %player% with tremendous force!"
     - "&e%killer% showed no mercy, knocking %player% into the void!"
+  slipped:
+    - "&c%player% slipped off of the map!"
+    - "&c%player% failed to stick the landing and fell into the abyss!"
+    - "&c%player% didn't see the edge and tumbled into the void!"
+    - "&c%player% underestimated the drop and met a tragic end in the void!"
+    - "&c%player% accidentally stepped into the void and disappeared!"
+    - "&c%player% couldn't keep their balance and fell off the platform into the void!"
+    - "&c%player% took a leap of faith and regretted it instantly as they fell into the void!"
+    - "&c%player% lost their footing and plunged into the void!"
 
 world:
   no: "&cThis world doesn't exist!"
@@ -19,8 +28,10 @@ world:
   types: "&fWorld types: &aNORMAL&8, &cNETHER&8, &7THE_END"
   has: "&cThis world is already in the list!"
   dhave: "&cThis world is not in the list!"
-  added: "&aWorld added to the list!"
   not-added: "&cWorld failed to be included into the list!"
+  added: "&aWorld added!"
+  failed-add: "&cWorld failed to add!"
+  removed: "&cWorld removed!"
   cmd:
     - "&6/world create <name> [type] &8- &7Creates a void world with the name and type"
     - "&6/world tp <name> &8- &7Teleports you to the world"

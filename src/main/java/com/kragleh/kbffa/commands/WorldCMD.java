@@ -118,7 +118,11 @@ public class WorldCMD extends BaseCommand {
 
         list.add(args[0]);
         KBFFA.getWorlds().set("worlds", list);
-        KBFFA.saveWorlds();
+        if (KBFFA.saveWorlds()) {
+            player.sendMessage(MessageUtil.format(KBFFA.getMessages().getString("world.added")));
+        } else {
+            player.sendMessage(MessageUtil.format(KBFFA.getMessages().getString("world.failed-add")));
+        }
     }
 
     @Subcommand("remove")

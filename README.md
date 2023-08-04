@@ -14,3 +14,9 @@ A Minecraft mini-game where players get a stick, few blocks and a pearl, and the
 
 ### Arena
 - `kbffa.arena` - Lets you use the root arena command without subcommands.
+- `kbffa.arena.create` - Lets you create an arena.
+
+## Placeholders
+- `kbffa_kills` - Gets the player kills.
+- `kbffa_deaths` - Gets the player deaths.
+- `kbffa_rampage` - Gets the player rampage.

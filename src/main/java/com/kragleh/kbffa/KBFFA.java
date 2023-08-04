@@ -3,11 +3,16 @@ package com.kragleh.kbffa;
 import co.aikar.commands.PaperCommandManager;
 import com.kragleh.kbffa.arena.ArenaManager;
 import com.kragleh.kbffa.commands.ArenaCMD;
+import com.kragleh.kbffa.commands.PearlCMD;
 import com.kragleh.kbffa.commands.WorldCMD;
 import com.kragleh.kbffa.db.DataSource;
+import com.kragleh.kbffa.db.PlayerStorage;
 import com.kragleh.kbffa.listeners.*;
+import com.kragleh.kbffa.util.PAPIExpansion;
 import com.kragleh.kbffa.util.VoidChunkGenerator;
+import com.kragleh.kbffa.util.WorldUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -26,11 +31,13 @@ public final class KBFFA extends JavaPlugin {
 
     private static KBFFA plugin;
     private Logger log;
+    private static YamlConfiguration messages;
     private static YamlConfiguration arenas;
     private static File arenasFile;
-    private static YamlConfiguration messages;
     private static YamlConfiguration worlds;
     private static File worldsFile;
+    private static YamlConfiguration kits;
+    private static File kitsFile;
 
     @Override
     public void onEnable() {
@@ -54,32 +61,27 @@ public final class KBFFA extends JavaPlugin {
         }
 
         // Load Database Tables
+        PlayerStorage.init();
 
         // Load Configuration Files
         loadWorlds();
         loadArenas();
         loadMessages();
+        loadKits();
 
         // Load Worlds
 
         List<String> worldList = worlds.getStringList("worlds");
 
         for (String s : worldList) {
-            World world = Bukkit.getWorld(s);
-
-            if (world == null) {
-                WorldCreator worldCreator = new WorldCreator(s);
-                worldCreator.generator(new VoidChunkGenerator());
-                worldCreator.generateStructures(false);
-
-                worldCreator.createWorld();
-            }
+            WorldUtil.loadWorld(s);
         }
 
         // Load Commands
         PaperCommandManager manager = new PaperCommandManager(this);
         manager.registerCommand(new WorldCMD());
         manager.registerCommand(new ArenaCMD());
+        manager.registerCommand(new PearlCMD());
 
         if (getConfig().getBoolean("setup")) {
             log.warning("Currently in setup mode! Change the setup value in config.yml to enter game mode!");
@@ -89,7 +91,6 @@ public final class KBFFA extends JavaPlugin {
         // Load Managers
         ArenaManager.init(arenas);
 
-
         BukkitScheduler scheduler = getServer().getScheduler();
         scheduler.scheduleSyncRepeatingTask(this, () -> {
             Random r = new Random();
@@ -97,7 +98,6 @@ public final class KBFFA extends JavaPlugin {
             ArenaManager.setCurrent(ArenaManager.arenas.get(nextArena));
             Bukkit.getOnlinePlayers().forEach(player -> player.teleport(ArenaManager.getCurrent().getSpawn()));
         }, 0, getConfig().getInt("arena.switcher") * 1000L);
-
 
         // Register Listeners
         getServer().getPluginManager().registerEvents(new DamageListener(), this);
@@ -109,6 +109,11 @@ public final class KBFFA extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new HungerListener(), this);
         getServer().getPluginManager().registerEvents(new MoveListener(), this);
         getServer().getPluginManager().registerEvents(new HungerListener(), this);
+
+        // Register Placeholders
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PAPIExpansion(this).register();
+        }
 
         log.info("Plugin loaded in " + (System.currentTimeMillis() - now) + "ms");
     }
@@ -177,6 +182,20 @@ public final class KBFFA extends JavaPlugin {
     }
     public static YamlConfiguration getArenas() {
         return arenas;
+    }
+
+    public void loadKits() {
+        File file = new File(getDataFolder(), "kits.yml");
+        kitsFile = file;
+
+        if (!file.exists()) {
+            saveResource("kits.yml", true);
+        }
+
+        kits = YamlConfiguration.loadConfiguration(file);
+    }
+    public static YamlConfiguration getKits() {
+        return kits;
     }
 
     public static boolean saveArenas() {

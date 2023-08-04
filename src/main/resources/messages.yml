@@ -2,6 +2,13 @@ no-perm: "&cYou don't have the permission for this!"
 usage: "&fCommand Usage:"
 arg-err: "&cToo many or not enough arguments!"
 
+pearl:
+  not-int: "&cThis slot isn't an integer!"
+  success: "&aPearl set to slot: &e"
+  invalid: "&cInvalid slot!"
+  cmd:
+    - "&6/pearl <slot> [type] &8- &7Sets the pearl slot from slot 3 - 9"
+
 game:
   killed:
     - "&e%killer% has knocked off %player%"

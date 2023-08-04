@@ -1,0 +1,9 @@
+kits:
+  default:
+    knocker: STICK
+    block: CLAY
+    armor:
+      helmet: LEATHER_HELMET
+      chestplate: none
+      leggings: none
+      boots: none

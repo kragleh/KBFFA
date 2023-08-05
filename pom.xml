@@ -6,7 +6,7 @@
 
     <groupId>com.kragleh</groupId>
     <artifactId>KBFFA</artifactId>
-    <version>0.5.0-DEV</version>
+    <version>0.6.0-DEV</version>
     <packaging>jar</packaging>
 
     <name>KBFFA</name>

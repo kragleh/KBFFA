@@ -2,6 +2,7 @@ package com.kragleh.kbffa.util;
 
 import com.kragleh.kbffa.KBFFA;
 import com.kragleh.kbffa.db.PlayerStorage;
+import com.kragleh.kbffa.rampage.RampageManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -49,12 +50,20 @@ public class PAPIExpansion extends PlaceholderExpansion {
             return String.valueOf(PlayerStorage.getDeaths(player.getPlayer()));
         }
 
-        if (params.equalsIgnoreCase("rampage")) {
+        if (params.equalsIgnoreCase("rampage_max")) {
             return String.valueOf(PlayerStorage.getRampage(player.getPlayer()));
+        }
+
+        if (params.equalsIgnoreCase("rampage_current")) {
+            return String.valueOf(RampageManager.getRampage(player.getPlayer()));
         }
 
         if (params.equalsIgnoreCase("kit")) {
             return String.valueOf(PlayerStorage.getKit(player.getPlayer()));
+        }
+
+        if (params.equalsIgnoreCase("pearl")) {
+            return String.valueOf(PlayerStorage.getPearl(player.getPlayer()));
         }
 
         return null; // Placeholder is unknown by the expansion

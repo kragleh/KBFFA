@@ -2,6 +2,12 @@
 
 A Minecraft mini-game where players get a stick, few blocks and a pearl, and they try their best to beat their opponents into the void.
 
+## Commands
+
+- `/arena` - Lets you create arenas which you can manage in arenas.yml
+- `/world` - The all in one world manager
+- `/pearl` - Lets you edit your pearl slot
+
 ## Permissions
 
 ### World
@@ -19,4 +25,6 @@ A Minecraft mini-game where players get a stick, few blocks and a pearl, and the
 ## Placeholders
 - `kbffa_kills` - Gets the player kills.
 - `kbffa_deaths` - Gets the player deaths.
-- `kbffa_rampage` - Gets the player rampage.
+- `kbffa_rampage_current` - Gets the current player rampage.
+- `kbffa_rampage_max` - Gets the max player rampage.
+- `kbffa_pearl` - Gets the player pearl slot.

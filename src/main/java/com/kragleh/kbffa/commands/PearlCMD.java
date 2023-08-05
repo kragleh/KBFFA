@@ -21,6 +21,7 @@ public class PearlCMD extends BaseCommand {
             KBFFA.getMessages().getStringList("pearl.cmd").forEach((message) -> {
                 player.sendMessage(MessageUtil.format(message));
             });
+            return;
         }
 
         try {

@@ -2,6 +2,7 @@ package com.kragleh.kbffa.listeners;
 
 import com.kragleh.kbffa.KBFFA;
 import com.kragleh.kbffa.db.PlayerStorage;
+import com.kragleh.kbffa.rampage.RampageManager;
 import com.kragleh.kbffa.util.KitUtil;
 import com.kragleh.kbffa.util.MessageUtil;
 import com.kragleh.kbffa.util.RespawnUtil;
@@ -29,6 +30,8 @@ public class DeathListener implements Listener {
         event.setDeathMessage(null);
         event.getDrops().clear();
 
+        RampageManager.removeRampage(player);
+
         if (killer == null) {
             List<String> messages = KBFFA.getMessages().getStringList("game.slipped");
             Bukkit.broadcastMessage(
@@ -37,6 +40,8 @@ public class DeathListener implements Listener {
                                     r.nextInt(messages.size())))
                                             .replace("%player%", event.getEntity().getName()));
         } else {
+
+            RampageManager.getRampage(killer);
 
             PlayerInventory inv = killer.getInventory();
             int pearlSlot = PlayerStorage.getPearl(killer);
